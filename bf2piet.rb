@@ -53,7 +53,7 @@
 #
 #     (top) 5 9 A B C D E F (bottom)
 #       |
-#       | deposit
+#       | withdraw
 #       v
 #     (top) C 5 9 A B C E F (bottom)
 #
