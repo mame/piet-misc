@@ -97,6 +97,7 @@
 #
 
 require "zlib"
+require "optparse"
 
 class Brainfuck2Piet
   def self.build_color(color)
@@ -111,9 +112,8 @@ class Brainfuck2Piet
   WHITE = build_color("FFFFFF")
   BLACK = build_color("000000")
 
-  ZOOM = 8
-
-  def initialize(code)
+  def initialize(codel_size, code)
+    @codel_size = codel_size
     depth = max_depth = 0
     @code = code.each_char.map do |c|
       case c
@@ -302,7 +302,7 @@ class Brainfuck2Piet
 
     # zoom
     img = img.map do |line|
-      [line.map {|color| [color] * ZOOM }.flatten(1)] * ZOOM
+      [line.map {|color| [color] * @codel_size }.flatten(1)] * @codel_size
     end.flatten(1)
 
     # build png
@@ -321,4 +321,17 @@ class Brainfuck2Piet
   end
 end
 
-print Brainfuck2Piet.new($<.read).png
+codel_size = 8
+output = $>
+ARGV.options do |op|
+  op.banner = "usage: bf2piet.rb [option] bf-code.bf > piet-code.png"
+  op.on("-c=SIZE", "--codel-size=SIZE", "set codel size", Integer) do |x|
+    codel_size = x.to_i
+  end
+  op.on("-o=FILE", "--output=FILE", "set output file") do |x|
+    output = open(x, "wb")
+  end
+  op.parse!
+end
+
+output.print Brainfuck2Piet.new(codel_size, $<.read).png
