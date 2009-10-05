@@ -271,12 +271,12 @@ class Brainfuck2Piet
       when ?,
         mark("", " #", "#")
 
-        ipop; push(0); iinc; idup; push(0); igreater; iswitch; paint(2)
-        save { white; }
+        ipop; push(1); push(-1); iinc; idup; push(-1); igreater; iswitch
+        save { paint; white; white }
         @y += 1
-        iadd
+        iadd; paint; white
         @y -= 1
-        paint(2); white
+        iadd(2); paint; white
 
       when ?.
         mark("", "", "#")
